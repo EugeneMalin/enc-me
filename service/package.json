@@ -1,0 +1,24 @@
+{
+  "name": "enc-me-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": " ",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sequelize": "^5.21.2",
+    "socket.io": "^2.3.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/sequelize": "^4.28.8",
+    "@types/socket.io": "^2.1.4",
+    "@types/winston": "^2.4.4"
+  }
+}
