@@ -4,4 +4,13 @@ log
 data
 .env
 .DS_Store
-
+application/.expo/*
+applocation/npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+application/web-build/
+application/web-report/
