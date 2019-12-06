@@ -1,10 +1,9 @@
 import socket, { Server } from 'socket.io';
 import http from 'http';
-
+import './lib/relations'
 import logger from './lib/log';
 
 import {connection, IMobileSockets} from './lib/sequelize'
-import './lib/relations';
 
 const io: Server = socket(http.createServer().listen(1337));
 
