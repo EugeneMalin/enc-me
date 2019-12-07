@@ -2,19 +2,23 @@ import { DefaultTheme, DarkTheme as DTheme } from 'react-native-paper'
 
 export const LightTheme = {
     ...DefaultTheme,
-    roundness: 8,
     dark: false,
     colors: {
         ...DefaultTheme.colors,
+        background: "#ffffff",
+        btnColor: "#c3c3c3"
+
     }
 }
 
 export const DarkTheme = {
     ...DTheme,
-    roundness: 5,
     dark: true,
     colors: {
         ...DTheme.colors,
+        background: "#000000",
+        btnColor: "#303030"
+
     }
 }
 

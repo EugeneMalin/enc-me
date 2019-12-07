@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button } from "react-native-paper";
+import { Button, Drawer } from "react-native-paper";
 import { changeTheme } from "../store";
 import { withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
@@ -13,9 +13,11 @@ class Profile extends React.Component {
 
   render() {
     return (
-      <Button title="Color theme" style={{ backgroundColor: this.props.theme['colors']['background'] }} theme={this.props.theme} onPress={() => changeTheme(this.props.theme)}>
-        Цветовая схема
-      </Button>
+      <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
+        <Button title="Color theme" style={{ backgroundColor: this.props.theme['colors']['btnColor'] }} theme={this.props.theme} onPress={() => changeTheme(this.props.theme)}>
+          Цветовая схема
+        </Button>
+      </Drawer.Section>
     )
   };
 

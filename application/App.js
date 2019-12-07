@@ -6,10 +6,9 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import FlashMessage from "react-native-flash-message";
 import AppNavigation from './navigation/App';
 import { Provider } from 'react-redux';
-import store from './store'
 import FlashButton from './components/FlashButton';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { withTheme } from 'react-native-paper';
+import store from './store'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -28,8 +27,8 @@ export default class App extends React.Component {
       <View style={{ flex: 1 }}  >
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         < Provider store={store} >
-          <PaperProvider theme={this.state.theme} >
-            <AppNavigation theme={'dark'} />
+          <PaperProvider theme={this.state.theme}>
+            <AppNavigation />
           </PaperProvider>
         </Provider>
         <FlashButton />

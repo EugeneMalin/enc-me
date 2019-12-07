@@ -2,11 +2,12 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
-import { Chat } from '../screens/Chat'
-import { Question } from '../screens/Question'
+import Chat from '../screens/Chat'
+import Question from '../screens/Question'
 import Map from '../screens/Map'
 import GamerProfile from '../screens/Profile'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { withTheme } from 'react-native-paper';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
