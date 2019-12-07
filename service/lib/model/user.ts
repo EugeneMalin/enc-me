@@ -1,11 +1,26 @@
 import { Model, DataTypes } from "sequelize";
-import { connection } from "../sequelize";
-
+import {connection} from "../sequelize";
 import crypto from 'crypto';
-import { Message } from "../relations";
+import {Message} from "../relations";
 
+export interface IUserDraft {
+    userName: string
+    hashedPassword: string
+    salt: string
+}
 
-class User extends Model {
+export interface IUser extends IUserDraft {
+    id?: number
+    password?: string
+    firstName?: string
+    lastName?: string
+    email?: string
+    token?: string
+    teamToken?: string
+    gameId?: number
+}
+
+class User extends Model implements IUser {
     public id!: number;
     public userName!: string;
     public hashedPassword!: string;
@@ -15,8 +30,8 @@ class User extends Model {
     public email!: string;
     public firstName!: string;
     public lastName!: string;
-    public gameId!: number
     public messages!: Message[]
+    public gameId!: number
 
     private _plainPassword: string = '';
 
@@ -35,6 +50,22 @@ class User extends Model {
 
     get password() {
         return this._plainPassword;
+    }
+
+    static getDraft(userName: string, password: string): IUser {
+        const u = new User();
+        
+        u.userName = userName;
+        u.password = password;
+
+        return {
+            userName: u.userName,
+            hashedPassword: u.hashedPassword,
+            salt: u.salt,
+            firstName: '',
+            lastName: '',
+            email: ''
+        };
     }
 }
 

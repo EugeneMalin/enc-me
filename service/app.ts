@@ -1,13 +1,13 @@
 import socket, { Server } from 'socket.io';
 import http from 'http';
-
+import config from './lib/config'
 import { connection, IMobileSockets } from './lib/sequelize'
 import './lib/relations';
 import { post, get } from './lib/engine'
 
 import { User, Message } from './lib/relations';
 
-const io: Server = socket(http.createServer().listen(1387));
+const io: Server = socket(http.createServer().listen(config.get('socketPort')));
 
 const mobileSockets: { [key: string]: IMobileSockets } = {};
 connection.sync().then(() => {
@@ -19,55 +19,76 @@ connection.sync().then(() => {
         }
     }).then(([BOT]) => {
         io.on('connection', socket => {
-            socket.on('signIn', (userName: string, password: string) => {
-
-                console.log("<<<<<<<<<<<<<<<<< signIn >>>>>>>>>>>>>>>>>\n", userName);
-
-                var path = '/api/account/signIn', obj = { 'accountName': userName, 'password': password };
-
-                post(obj, path).then((answer): any => {
-                    let answerObj = JSON.parse(answer);
-
-                    if (answerObj.isSuccess) {
-
-
+            const uploadUser = (user: User) => {
+                mobileSockets[user.id] = {
+                    socket: socket.id,
+                    teamToken: user.teamToken,
+                    coordinate: [0, 0]
+                }
+        
+                socket.emit('userUploaded', {
+                    user
+                });
+            }
+            // вход пользователя по паролю и логину
+            socket.on('enterUser', (credentials: {
+                userName: string,
+                password: string
+            }) => {
+                if (!credentials) {
+                    return;
+                }
+                if (!credentials.userName && !credentials.password) {
+                    return;
+                }
+                post({
+                    accountName: credentials.userName,
+                    password: credentials.password
+                }, '/api/account/signIn').then((res: string) => {
+                    const engineUser = JSON.parse(res);
+                    const userDraft = User.getDraft(credentials.userName, credentials.password)
+                    engineUser.isSuccess ? 
                         User.findOrCreate({
                             where: {
-                                userName: userName
+                                userName: credentials.userName
                             },
-                            defaults: {
-
-                                id: answerObj.accountID,
-                                accountName: userName,
-                                hashedPassword: password,
-                                token: answerObj.token,
-                                teamToken: answerObj.teamToken,
-                                firstName: answerObj.accountFirstName,
-                                lastName: answerObj.accountLastName
-                            }// если он не существует мы содаем его с этими доп данными
-
                         }).then(([user]) => {
-
-                            mobileSockets[user.id] = {
-                                socket: socket.id,
-                                teamToken: user.teamToken,
-                                coordinate: [0, 0]
-
-                            }
-                            socket.emit('signedIn', {
-                                user: user
+                        if (user) {
+        
+                            user.token = engineUser.token
+                            user.teamToken = engineUser.teamToken
+                            user.hashedPassword = userDraft.hashedPassword
+                            user.salt = userDraft.salt
+                            user.firstName = engineUser.accountFirstName
+                            user.lastName = engineUser.accountLastName
+                            user.gameId = engineUser.games[0]
+        
+                            user.save().then(() => {
+                                if (user.check(credentials.password)) {
+                                    uploadUser(user);
+                                } else {
+                                    socket.emit('showMessage', {
+                                        message: `Неправильный пароль для ${credentials.userName}.`,
+                                        type: 'danger',
+                                        kind: 'auth'
+                                    });
+                                }
+                            })
+                        } else {
+                            socket.emit('showMessage', {
+                                message: `Пользователь ${credentials.userName} не существует.`,
+                                type: 'danger',
+                                kind: 'auth'
                             });
-                        });
-                    } else {
-                        socket.emit('showMessage', {
-                            message: `Неавторизованный в системе пользователь ${obj.accountName}.`,
-                            type: 'danger',
-                            kind: 'auth'
-                        })
-                    }
+                        }
+                    }) : socket.emit('showMessage', {
+                        message: `Неавторизованный в системе пользователь ${credentials.userName}.`,
+                        type: 'danger',
+                        kind: 'auth'
+                    });
+                    
                 })
             });
-
             // собств-на задаем координаты от пользователя \ обновяем их
             socket.on('getCoordFromUser', (data) => {
                 mobileSockets[data.userId].coordinate = data.coord;
