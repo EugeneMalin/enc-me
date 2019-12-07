@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import {Loading} from '../screens/Loading'
+import Loading from '../screens/Loading'
 
 
 const config = Platform.select({

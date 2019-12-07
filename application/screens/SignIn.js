@@ -1,12 +1,24 @@
 import React from 'react';
-import { Text} from 'react-native';
+import { Text } from 'react-native';
+import { withTheme, Drawer } from 'react-native-paper';
+import { connect } from 'react-redux';
+
 
 class SignIn extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-    return <Text>Авторизация</Text>
+    return (
+      <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
+        <Text>Авторизация</Text>
+      </Drawer.Section>
+    )
   }
 }
 
-export {
-  SignIn
-};
+const themeState = (state) => ({
+  theme: state.theme
+});
+
+export default withTheme(connect(themeState)(SignIn));

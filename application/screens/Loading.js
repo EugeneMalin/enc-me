@@ -6,14 +6,23 @@ import {
   View,
 } from 'react-native';
 
+import { Drawer, withTheme } from 'react-native-paper';
+import { connect } from 'react-redux';
+
+
 class Loading extends React.Component {
   // Render any loading content that you like here
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator />
-        <StatusBar barStyle="default" />
-      </View>
+      <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
+        <View style={styles.container}>
+          <ActivityIndicator />
+          <StatusBar barStyle="default" />
+        </View>
+      </Drawer.Section>
     );
   }
 }
@@ -26,6 +35,8 @@ const styles = StyleSheet.create({
   }
 })
 
-export {
-  Loading
-};
+const themeState = (state) => ({
+  theme: state.theme
+});
+
+export default withTheme(connect(themeState)(Loading));
