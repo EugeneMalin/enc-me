@@ -14,11 +14,21 @@ socket.on('showMessage', res => {
     })
 });
 
-export const logout = () => {
-    onSignOut().then(() => {
-        navigate('SignIn')
-    })
-}
+//if the user, dispetch
+socket.on('SignIn', res => {    
+    console.log(res)
+    switch (res.type) {
+        case user:
+            store.dispatch(gotUser(user))
+            navigate
+        default:
+            showMessage({
+                message: "Error",
+                description: "Some Error",
+                type: "danger"
+            })
+    }
+})
 
 export const enterUser = (credentials) => {
     socket.emit('enterUser', credentials);
