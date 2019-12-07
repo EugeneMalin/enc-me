@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import { YMaps, Map as YMap, Placemark, SearchControl } from 'react-yandex-maps';
+import { YMaps, Map as YMap, Placemark, SearchControl, GeolocationControl } from 'react-yandex-maps';
 import { connect } from 'react-redux';
 import socket from '../store/socket';
 import { array } from 'prop-types';
@@ -24,7 +24,7 @@ const API_KEY = "0a2d7a02-6fe0-4f2b-b87b-c6afd3e44764";
 class Map extends React.Component {
   constructor(props) {
     super(props);
-    socket.emit('findTeammates', {sender: this.props.user}); // запрос на получение координат участников игры
+    socket.emit('calcCoord', this.props.user.teamToken); // запрос на получение координат участников игры (TeamToken)
   }
 
   state = { 
@@ -32,19 +32,22 @@ class Map extends React.Component {
     // можно добавить имена
   }
 
-  componentDidMount() { // событие, возвращающее координаты игроков
+  componentDidMount() { 
+    // событие, возвращающее координаты игроков
     var self = this;
-    socket.on('nearTeammates', function (teammates) {
-      self.setState(teammates)
+    socket.on('getTeamCoord', function (teammates) {
+      self.setState(teammates) // возвращает массив координат [[], [], [], ...]
     });
+
   }
 
   render() {
-    return ( // state.teammates вместо coordinates (done)
+    return (
       <View style={styles.container}>
         <YMaps enterprise query = {{apikey: API_KEY}}>
           <YMap style={StyleSheet.absoluteFillObject} defaultState={mapData}> 
             <SearchControl options={{ float: 'right', provider: 'yandex#map', noPlacemark: false }} />
+            <GeolocationControl options={{ float: 'left', noPlacemark: false }} />
             {this.state.teammates.map(coordinate => <Placemark properties={{balloonContent: 'Some text'}} geometry={coordinate} />)}
           </YMap>
         </YMaps>

@@ -57,16 +57,20 @@ export const updateTask = (user) => {
         user
     })
 }
-
 export const openChat = (user) => {
     socket.emit('chat', {user});
 };
 export const sendMessage = (text, sender) => {
     socket.emit('message', { text, sender });
 };
-
 export const enterUser = (credentials) => {
     socket.emit('SignIn', credentials);
 };
+
+// событие, запрашивающее мои координаты
+socket.on('updateCoord', () => {
+  if (store.getState()['user'] != undefined)
+    socket.emit('getCoordFromUser', {coord: [57.631285, 39.840864], userId: store.getState()['user'].id});
+});
 
 export default store;
