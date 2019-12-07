@@ -2,8 +2,9 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
-import {Chat as MemberChat} from '../screens/Chat'
-import {Profile as MemberProfile} from '../screens/Profile'
+import MemberChat from '../screens/Chat'
+import MemberProfile from '../screens/Profile'
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -12,7 +13,7 @@ const config = Platform.select({
 
 const ChatStack = createStackNavigator({
   MemberChat
- }, config);
+}, config);
 ChatStack.path = '';
 ChatStack.navigationOptions = {
   tabBarLabel: 'Chat',
@@ -32,7 +33,7 @@ ProfileStack.navigationOptions = {
   )
 };
 
-const tabNavigator = createBottomTabNavigator({
+const tabNavigator = createMaterialBottomTabNavigator({
   ChatStack,
   ProfileStack
 });

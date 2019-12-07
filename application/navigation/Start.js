@@ -1,6 +1,6 @@
 import { createStackNavigator } from "react-navigation";
 import { Platform } from 'react-native';
-import {SignIn} from "../screens/SignIn";
+import SignIn from "../screens/SignIn";
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
