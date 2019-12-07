@@ -12,5 +12,7 @@ export default createAppContainer(
     Start,
     Gamer,
     Member
+  },  {
+    initialRouteName: 'Start',
   })
 );

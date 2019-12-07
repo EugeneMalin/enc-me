@@ -12,7 +12,7 @@ const switchNavigator = createSwitchNavigator({
   Gamer,
   Member
 }, {
-  initialRouteName: 'Transfer',
+  initialRouteName: 'Start',
 });
 switchNavigator.path = '';
 
