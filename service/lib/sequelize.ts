@@ -1,6 +1,6 @@
-import { Sequelize } from 'sequelize';  
+import { Sequelize } from 'sequelize';
 
-const connection =  new Sequelize({
+const connection = new Sequelize({
     database: 'encounter',
     dialect: 'postgres',
     username: 'postgres',
@@ -9,11 +9,13 @@ const connection =  new Sequelize({
     logging: process.env.NODE_ENV !== 'production'
 })
 
-
 export interface IMobileSockets {
     socket: string,
-    teamToken: string | null
+    teamToken: string | null,
+    coordinate: number[]
 }
+
+
 
 export {
     connection
