@@ -2,6 +2,7 @@ import React from 'react';
 import { Drawer, withTheme, TextInput, Text, Button } from 'react-native-paper';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import { submitTask, updateTask } from '../store';
 
 class Question extends React.Component {
   constructor(props) {
@@ -40,23 +41,25 @@ class Question extends React.Component {
   }
 
   render() {
+    const clues = this.props.task && this.props.task.clues || []
+
     return (
       <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
         <Text>
           {(this.props.task && this.props.task.question) || 'Questions is over'}
         </Text>
 
-        {this.props.task.question && clues.map(exp => <Text>
+        {clues.map(exp => <Text>
           {exp}
         </Text>)}
         
-        { this.props.task.cluesCount && clues.length != this.props.task.cluesCount ?
+        { this.props.task && this.props.task.cluesCount && clues.length != this.props.task.cluesCount ?
           <Text>
             Other hint after: {delay.min}:{delay.sec}. {clues.length}/{this.props.task.cluesCount||0}
           </Text>
         :null
         }
-        {this.props.task.question ?
+        {(this.props.task && this.props.task.question) ?
         <TextInput
           onChangeText={ value => this.handleChange('answer', value)}
           placeholder='answer'
@@ -64,7 +67,7 @@ class Question extends React.Component {
           autoCapitalize='none'
         />
         : null }
-        {this.props.task.question ?
+        {(this.props.task && this.props.task.question) ?
             <Button
               onPress={ this.handleSubmit }
               title='Отправить'
@@ -76,7 +79,9 @@ class Question extends React.Component {
 }
 
 const themeState = (state) => ({
-  theme: state.theme
+  theme: state.theme,
+  task: state.task,
+  user: state.user
 });
 
 export default withTheme(connect(themeState)(Question));
