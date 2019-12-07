@@ -15,3 +15,4 @@ export function get(data: Object, path: string) {
         });
     })
 }
+
