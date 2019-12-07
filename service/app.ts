@@ -28,7 +28,7 @@ const mobileSockets: { [key: string]: IMobileSockets } = {};
 // const url: any = 'http://10.76.173.216:5055://showAllGames/';
 
 
-connection.sync({force: true}).then(() => {
+connection.sync().then(() => {
     User.create({
         userName: "Vladimir"
     }).then((user) => {
