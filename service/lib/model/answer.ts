@@ -3,6 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 
 class Answer extends Model {
     public id!: number;
+    public user_id!: number;
     public userAnswer!: number | string;
     public taskId!: number | string;
     public validAnswer!: boolean;
@@ -14,6 +15,9 @@ Answer.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
     },
     userAnswer: DataTypes.TEXT,
     taskId: DataTypes.STRING,
