@@ -66,7 +66,7 @@ export const sendMessage = (text, sender) => {
 };
 
 export const enterUser = (credentials) => {
-    socket.emit('enterUser', credentials);
+    socket.emit('SignIn', credentials);
 };
 
 export default store;
