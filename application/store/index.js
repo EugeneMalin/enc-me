@@ -73,7 +73,7 @@ export const changeTheme = (theme) => {
 
 
 export const enterUser = (credentials) => {
-    socket.emit('SignIn', credentials);
+    socket.emit('signIn', credentials);
 };
 
 
