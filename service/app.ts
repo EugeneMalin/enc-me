@@ -4,6 +4,7 @@ import config from './lib/config'
 import { connection, IMobileSockets } from './lib/sequelize'
 import './lib/relations';
 import { post, get } from './lib/engine'
+import {Op} from 'sequelize'
 
 import { User, Message } from './lib/relations';
 
@@ -148,15 +149,19 @@ connection.sync().then(() => {
 
             ///CHAT
             socket.on('chat', ({user}) => {
+                const teamToken = user.teamToken
                 User.findAll({
                     where: {
-                        teamToken: user.teamToken
+                        [Op.or]: [
+                            {teamToken},
+                            {id: BOT.id}
+                        ]
                     },
                     include: [Message]
                 }).then(users => {
                     const messages: Message[] = [];
                     users.forEach(user => {
-                        messages.push(...user.messages.filter(msg => msg.groupId === user.teamToken).map(msg => msg.mark(user)))
+                        messages.push(...user.messages.filter(msg => msg.groupId === teamToken).map(msg => msg.mark(user)))
                     })
                     messages.sort((a, b) => {
                         return b.createdAt.getTime() - a.createdAt.getTime()
