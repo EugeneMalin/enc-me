@@ -28,7 +28,7 @@ const mobileSockets: { [key: string]: IMobileSockets } = {};
 // const url: any = 'http://10.76.173.216:5055://showAllGames/';
 
 
-connection.sync({ force: true }).then(() => {
+connection.sync().then(() => {
     io.on('connection', socket => {
         socket.on('answer', ({ answer }) => {
             logger.info(`Emit 'answer' with ${answer}`)
