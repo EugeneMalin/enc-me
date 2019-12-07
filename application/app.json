@@ -25,9 +25,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "entryPoint": "node_modules/expo/AppEntry.js"
-  },
-  "displayName": "EncounterMe!",
-  "name": "EncounterMe!"
+    }
+  }
 }
