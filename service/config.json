@@ -16,33 +16,7 @@
 		}
 	},
 	"engine": {
-		"host": "10.76.173.216",
-		"port": 5055
-	},
-	"game": {
-		"id": 0,
-		"description": "Игра 1",
-		"startAt": "02/12/2019",
-		"teamsLimit": 5,
-		"tasks": [
-			{
-				"id": 0,
-				"question": "Сколько рогов у единорога?",
-				"timeLimit": 15,
-				"answer": 1
-			},
-			{
-				"id": 0,
-				"question": "2 + 2 * 2?",
-				"timeLimit": 15,
-				"answer": 6
-			},
-			{
-				"id": 0,
-				"question": "Самое быстрое животное?",
-				"timeLimit": 15,
-				"answer": "Гепард"
-			}
-		]
+		"host": "192.168.88.190",
+		"port": 5060
 	}
 }

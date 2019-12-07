@@ -35,7 +35,7 @@ class Map extends React.Component {
   componentDidMount() { // событие, возвращающее координаты игроков
     var self = this;
     socket.on('nearTeammates', function (teammates) {
-      self.setState(teammates)
+      self.setState({teammates})
     });
   }
 

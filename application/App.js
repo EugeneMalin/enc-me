@@ -6,26 +6,34 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import FlashMessage from "react-native-flash-message";
 import AppNavigation from './navigation/App';
 import { Provider } from 'react-redux';
-import store from './store'
 import FlashButton from './components/FlashButton';
-import { DarkTheme, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
+import store from './store'
 
-export default function App(props) {
-  return (
-    <View style={styles.container}>
-      {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <Provider store={store}>
-          <AppNavigation/>
-        </Provider>
-      <FlashButton/>
-      <FlashMessage position="top" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("app created");
+    store.subscribe(() => {
+      console.log(store.getState()["theme"]);
+      this.setState({
+        theme: store.getState()["theme"]
+      })
+    })
   }
-});
+  state = { theme: store.getState()["theme"] }
+  render() {
+    return (
+      <View style={{ flex: 1 }}  >
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        < Provider store={store} >
+          <PaperProvider theme={this.state.theme}>
+            <AppNavigation />
+          </PaperProvider>
+        </Provider>
+        <FlashButton />
+        <FlashMessage position="top" />
+      </View >
+    )
+  };
+}
