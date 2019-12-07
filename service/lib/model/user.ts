@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import {connection} from "../sequelize";
+import { connection } from "../sequelize";
 import crypto from 'crypto';
 
 
@@ -41,7 +41,7 @@ User.init({
         autoIncrement: true,
         primaryKey: true
     },
-    username: {
+    userName: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false
