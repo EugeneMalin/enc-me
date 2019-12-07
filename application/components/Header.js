@@ -15,7 +15,7 @@ class Header extends React.Component {
   render() {
     const { isSwitchOn } = this.state;
     return (
-      <View style={{ left: '0', margin: '0', padding: '0', height: '100%', width: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
+      <View style={{ left: '-16px', margin: '0', padding: '0', height: '100%', width: '110%', backgroundColor: this.props.theme['colors']['background'] }}>
         <Text style={{ width: '100%' }}>{this.props.user && this.props.user.gameId ? this.props.title : 'No active games'}</Text>
         <Text style={{ width: '100%' }}>{this.props.user && this.props.user.gameId ? this.props.subtitle : ''}</Text>
         <View style={{ flexDirection: "row", left: '0' }}>
