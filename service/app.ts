@@ -3,12 +3,13 @@ import http from 'http';
 
 import logger from './lib/log';
 
-import { connection, IMobileSockets } from './lib/sequelize'
+import { connection, IMobileSockets, coordinateInt } from './lib/sequelize'
 import './lib/relations';
 import { post, get } from './lib/engine'
 
 import { request } from 'http';
 import { User } from './lib/relations';
+import { isError } from 'util';
 
 var obj = { 'accountName': 'novikov', 'password': '12345678' },
     path = '/api/account/signIn';
@@ -24,7 +25,7 @@ var obj = { 'accountName': 'novikov', 'password': '12345678' },
 const io: Server = socket(http.createServer().listen(1387));
 
 const mobileSockets: { [key: string]: IMobileSockets } = {};
-
+const arrCoord = [];
 // const url: any = 'http://10.76.173.216:5055://showAllGames/';
 
 
@@ -62,9 +63,12 @@ connection.sync().then(() => {
                         }// если он не существует мы содаем его с этими доп данными
 
                     }).then(([user]) => {
+
                         mobileSockets[user.id] = {
                             socket: socket.id,
-                            teamToken: user.teamToken
+                            teamToken: user.teamToken,
+                            coordinate: [0, 0]
+
                         }
                         socket.emit('signedIn', {
                             user: user
@@ -77,29 +81,35 @@ connection.sync().then(() => {
                 }
             })
         });
-        // получение данных о местоположении команды
-        socket.on('calcCoords', (userId) => {
 
-            User.findAll({ where: { teamToken: mobileSockets[userId].teamToken }, raw: true })
+        // собств-на задаем координаты от пользователя \ обновяем
+        socket.on('getCoordFromUser', (data) => {
+            mobileSockets[data.userId].coordinate = data.coord;
+        });
+
+        //каждые 5 минут уточняем у пользователя координаты его (все пользователи)
+        setInterval(() => {
+            socket.broadcast.emit('updateCoord', {});//все пользователи получат событие
+        }, 300000);
+
+
+        // Когфд апользователь заходит на карту - нужно передать ему координаты его команды
+        socket.on('calcCoord', (teamToken) => {
+
+            User.findAll({ where: { teamToken: teamToken }, raw: true })
                 .then((users) => {
                     console.log(users);
+                    var teamCoordinate: number[][] = [];
                     users.forEach((user) => {
-                        var keys = Object.keys(mobileSockets),
-                            index = keys.indexOf(user.id.toString()),
-                            teamToken;
-                        if (index >= 0) {
-                            //если нашли id и все хорошо
-                            teamToken = mobileSockets[keys[index]].teamToken;
-                            // User.findAll({ where: { teamToken: teamToken } }).then((team) => {
-
-                            // };
-
-                        }
+                        teamCoordinate.push(mobileSockets[user.id].coordinate);
+                        // // var keys = Object.keys(mobileSockets),
+                        // //     index = keys.indexOf(user.id.toString()),
+                        // //     savedSocketId;
                     });
+                    socket.emit('signedIn', teamCoordinate);
+                    // teamCoordinate
 
                 }).catch(err => console.log('calcCoords', err));
         });
-
-
     })
 })
