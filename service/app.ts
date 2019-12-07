@@ -15,9 +15,9 @@ var obj = { 'accountName': 'novikov', 'password': '12345678' },
 
 // 
 // //зов функции  post
-post(obj, path).then((answer: string) => {
-    console.log("Answer -_> ", answer);
-})
+// post(obj, path).then((answer: string) => {
+//     console.log("Answer -_> ", answer);
+// })
 
 
 
@@ -36,13 +36,15 @@ connection.sync().then(() => {
         })
         socket.on('signIn', (userName: string, password: string) => {
 
+            console.log("<<<<<<<<<<<<<<<<< signIn >>>>>>>>>>>>>>>>>\n", userName);
+
             var path = '/api/account/signIn', obj = { 'accountName': userName, 'password': password };
-            // var obj = { 'accountName': 'novikov', 'password': '12345678' },
-            //     path = '/api/account/signIn';
+
             post(obj, path).then((answer): any => {
                 let answerObj = JSON.parse(answer);
 
                 if (answerObj.isSuccess) {
+
 
                     User.findOrCreate({
                         where: {
@@ -56,11 +58,14 @@ connection.sync().then(() => {
                             token: answerObj.token,
                             teamToken: answerObj.teamToken,
                             firstName: answerObj.accountFirstName,
-                            lastName: answerObj.accountLastName,
-                            gameId: 0
+                            lastName: answerObj.accountLastName
                         }// если он не существует мы содаем его с этими доп данными
 
-                    }).then((user) => {
+                    }).then(([user]) => {
+                        mobileSockets[user.id] = {
+                            socket: socket.id,
+                            teamToken: user.teamToken
+                        }
                         socket.emit('signedIn', {
                             user: user
                         });
@@ -71,6 +76,30 @@ connection.sync().then(() => {
                     });
                 }
             })
-        })
+        });
+        // получение данных о местоположении команды
+        socket.on('calcCoords', (userId) => {
+
+            User.findAll({ where: { teamToken: mobileSockets[userId].teamToken }, raw: true })
+                .then((users) => {
+                    console.log(users);
+                    users.forEach((user) => {
+                        var keys = Object.keys(mobileSockets),
+                            index = keys.indexOf(user.id.toString()),
+                            teamToken;
+                        if (index >= 0) {
+                            //если нашли id и все хорошо
+                            teamToken = mobileSockets[keys[index]].teamToken;
+                            // User.findAll({ where: { teamToken: teamToken } }).then((team) => {
+
+                            // };
+
+                        }
+                    });
+
+                }).catch(err => console.log('calcCoords', err));
+        });
+
+
     })
 })
