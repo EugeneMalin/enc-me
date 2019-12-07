@@ -1,50 +1,48 @@
+import config from './config';
 import { ParsedUrlQuery } from 'querystring';
 import { request } from 'http';
 
-export function post(data: object, path: string) {
+export function post(data: ParsedUrlQuery, path: string) {
     return new Promise<string>((resolve) => {
-        // console.log('!resolve ---->   ', resolve);
         const req = request({
-            hostname: '10.76.173.216',
-            port: 5055,
+            hostname: config.get('engine:host'),
+            port: config.get('engine:port'),
             path,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             }
-        }, (res) => {
-            // console.log('!res---->   ', res);
+          }, (res) => {
             res.setEncoding('utf8');
             res.on('data', (body) => {
                 resolve(body);
             });
         })
-        req.on('error', function (e) {
+        req.on('error', function(e) {
             console.log('problem with request: ' + e.message);
         });
-        // console.log('!req---->   ', req);
         req.write(JSON.stringify(data))
         req.end()
     })
 }
 
-export function get(data: object, path: string) {
+export function get(data: ParsedUrlQuery, path: string) {
     return new Promise<string>((resolve) => {
         const req = request({
-            hostname: '10.76.173.216',
-            port: 5055,
+            hostname: config.get('engine:host'),
+            port: config.get('engine:port'),
             path,
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
-        }, (res) => {
+          }, (res) => {
             res.setEncoding('utf8');
             res.on('data', (body) => {
                 resolve(body);
             });
         })
-        req.on('error', function (e) {
+        req.on('error', function(e) {
             console.log('problem with request: ' + e.message);
         });
         req.write(JSON.stringify(data))

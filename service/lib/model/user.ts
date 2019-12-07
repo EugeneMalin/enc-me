@@ -1,11 +1,13 @@
 import { Model, DataTypes } from "sequelize";
 import { connection } from "../sequelize";
+
 import crypto from 'crypto';
+import { Message } from "../relations";
 
 
 class User extends Model {
     public id!: number;
-    public username!: string;
+    public userName!: string;
     public hashedPassword!: string;
     public salt!: string;
     public token!: string;
@@ -14,6 +16,7 @@ class User extends Model {
     public firstName!: string;
     public lastName!: string;
     public gameId!: number
+    public messages!: Message[]
 
     private _plainPassword: string = '';
 
