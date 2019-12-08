@@ -10,6 +10,8 @@ import FlashButton from './components/FlashButton';
 import { Provider as PaperProvider } from 'react-native-paper';
 import store from './store'
 
+console.disableYellowBox = true;
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);

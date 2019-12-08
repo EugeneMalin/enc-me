@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   StyleSheet,
-  View
+  View,
+  Dimensions, 
 } from 'react-native';
-import { YMaps, Map as YMap, Placemark, SearchControl } from 'react-yandex-maps';
 import { connect } from 'react-redux';
 import socket from '../store/socket';
 import Header from '../components/Header';
-
+import MapView from 'react-native-maps';
 const mapData = {
   center: [57.631285, 39.840864],
   zoom: 14,
@@ -79,16 +79,18 @@ class Map extends React.Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  }
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
 });
-
 
 const mapState = (state) => ({
   user: state.user

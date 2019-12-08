@@ -13,6 +13,9 @@ class Question extends React.Component {
     
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    setInterval(() => {
+      updateTask(this.props.user)
+    }, 360000)
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -45,7 +48,7 @@ class Question extends React.Component {
     const delay = this.props.task && this.props.task.delay || {min: 0, sec: 0}
     return (
       <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
-        <Text style={{margin: 12}}>
+        <Text style={{fontSize: 24, marginLeft: 12, marginRight: 12, marginTop: 12}}>
           {(this.props.task && this.props.task.question) || 'Questions is over'}
         </Text>
 
@@ -54,7 +57,7 @@ class Question extends React.Component {
         </Text>)}
         
         { this.props.task && this.props.task.cluesCount && clues.length != this.props.task.cluesCount ?
-          <Text>
+          <Text style={{marginLeft: 12, marginRight: 12, marginTop: 3, fontWeight: "bold"}}>
             Other hint after: {delay.min}:{delay.sec}. {clues.length}/{this.props.task.cluesCount||0}
           </Text>
         :null
@@ -65,12 +68,14 @@ class Question extends React.Component {
           placeholder='answer'
           returnKeyType='go'
           autoCapitalize='none'
+          style={{margin: 12}}
         />
         : null }
         {(this.props.task && this.props.task.question) ?
             <Button
+              style={{ margin: 18, backgroundColor: this.props.theme['colors']['btnColor'] }} theme={this.props.theme}
               onPress={ this.handleSubmit }
-              title='Отправить'
+              title='Send'
             />
         : null }
       </Drawer.Section>
