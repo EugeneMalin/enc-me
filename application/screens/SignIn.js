@@ -17,7 +17,7 @@ class SignIn extends React.Component {
   }
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: () => <Header title='' subtitle=''/>
+      headerTitle: () => <Header title='' subtitle=' '/>
     };
   };
 
@@ -31,14 +31,15 @@ class SignIn extends React.Component {
 
   render() {
     return (
-      <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
-          <Text >
+      <Drawer.Section style={{ height: '100%', width: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
+          <Text style={{height: 40, fontSize: 24, marginLeft: 12, marginRight: 12, marginTop: 12}}>
             SignIn
           </Text>
-          <Text >
+          <Text style={{height: 30, fontSize: 16, marginLeft: 12, marginRight: 12}}>
             Please, enter your userName and password
           </Text>
           <TextInput
+            style={{margin: 12}}
             onChangeText={ value => this.handleChange('userName', value) }
             returnKeyType='next'
             placeholder='userName'
@@ -46,7 +47,8 @@ class SignIn extends React.Component {
             autoCapitalize='none'
             
           />
-          <TextInput
+          <TextInput            
+            style={{margin: 12}}
             onChangeText={ value => this.handleChange('password', value)}
             secureTextEntry
             placeholder='password'
@@ -54,8 +56,8 @@ class SignIn extends React.Component {
             autoCapitalize='none'
             
           />
-          <Button title="Color theme" style={{ backgroundColor: this.props.theme['colors']['btnColor'] }} theme={this.props.theme} onPress={ this.handleSubmit }>
-            Войти
+          <Button title="Color theme" style={{ margin: 18, backgroundColor: this.props.theme['colors']['btnColor'] }} theme={this.props.theme} onPress={ this.handleSubmit }>
+            Sign In
           </Button>
       </Drawer.Section>
     );

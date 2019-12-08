@@ -7,7 +7,7 @@ export function post(data: ParsedUrlQuery, path: string) {
         return new Promise<string>(resolve => {
             resolve(JSON.stringify({
                 //@ts-ignore
-                isSuccess: ['novikov', 'kokoz', 'demidova'].indexOf(data.accountName) > -1, 
+                isSuccess: ['novikov', 'kokuz', 'demidova'].indexOf(data.accountName) > -1, 
             }))
         })
     }

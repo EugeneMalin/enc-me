@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Drawer, Text } from "react-native-paper";
-import { changeTheme } from "../store";
+import { Button, Drawer, Text} from "react-native-paper";
+import { View } from 'react-native'
 import { withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
@@ -19,21 +19,23 @@ class Profile extends React.Component {
   render() {
     return (
       <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
-        <Text>
-          {this.props.user.teamToken ? 'gamer: ' : 'user: '}
-        </Text>
-        <Text >
-          {this.props.user.lastName || this.props.user.firstName ? `${this.props.user.lastName} ${this.props.user.firstName}` : 'no name'}
-        </Text>
-
-        <Text>
-          userName: {this.props.user.userName}
-        </Text>
-        <Button
-          onPress={() => this.props.navigation.navigate('SignIn')}
-          title='Logout'
-        />
-        <Button style={{ backgroundColor: this.props.theme['colors']['btnColor'] }} theme={this.props.theme} onPress={() => this.props.navigation.navigate('SignIn')}>
+        <View style={{flexDirection: 'row', margin: 12, alignItems: 'baseline'}}>
+          <Text style={{fontSize: 12}}>
+            {this.props.user.teamToken ? 'gamer: ' : 'user: '}
+          </Text>
+          <Text style={{fontSize: 18}}>
+            {this.props.user.lastName || this.props.user.firstName ? `${this.props.user.lastName} ${this.props.user.firstName}` : 'no name'}
+          </Text>
+        </View>
+        <View style={{flexDirection: 'row', margin: 12, alignItems: 'baseline'}}>
+          <Text style={{fontSize: 12}}>
+            {'userName: '}
+          </Text>
+          <Text style={{fontSize: 18}}>
+            {this.props.user.userName}
+          </Text>
+        </View>
+        <Button style={{ margin: 18, backgroundColor: this.props.theme['colors']['btnColor'] }} theme={this.props.theme} onPress={() => this.props.navigation.navigate('SignIn')}>
           Выйти
         </Button>
       </Drawer.Section>

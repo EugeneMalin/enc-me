@@ -278,9 +278,7 @@ connection.sync().then(() => {
                 get({}, `/api/gameTracking/nextStep/${user.teamToken}@${user.gameId}`).then((res: string) => {
                     Object.keys(mobileSockets).forEach(userId => {
                         if (mobileSockets[userId].teamToken === user.teamToken) {
-                            get({}, `/api/gameTracking/nextStep/${user.teamToken}@${user.gameId}`).then((res: string) => {
-                                incomingTask(res, mobileSockets[userId].socket)
-                            })
+                            incomingTask(res, mobileSockets[userId].socket)
                         }
                     })
                 })

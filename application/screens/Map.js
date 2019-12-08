@@ -6,7 +6,7 @@ import {
 import { YMaps, Map as YMap, Placemark, SearchControl } from 'react-yandex-maps';
 import { connect } from 'react-redux';
 import socket from '../store/socket';
-import { array } from 'prop-types';
+import Header from '../components/Header';
 
 const mapData = {
   center: [57.631285, 39.840864],
@@ -26,6 +26,12 @@ class Map extends React.Component {
     super(props);
     socket.emit('findTeammates', {sender: this.props.user}); // запрос на получение координат участников игры
   }
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: () => <Header title='Game is active' subtitle='You can call help 8 (485) 230-85-49'/>
+    };
+  };
 
   state = { 
     teammates: [] 
