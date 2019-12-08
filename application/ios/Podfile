@@ -32,4 +32,6 @@ target 'EncounterMe' do
 
   use_unimodules!
 
+  pod 'react-native-torch', :path => '../node_modules/react-native-torch'
+
 end

@@ -69,15 +69,12 @@ connection.sync().then(() => {
                             if (engineUser.accountLastName) {
                                 user.lastName = engineUser.accountLastName
                             }
-                            if (engineUser.games && engineUser.games[0]) {
-                                user.gameId = engineUser.games[0]
+                            if (engineUser.games && engineUser.games[1]) {
+                                user.gameId = engineUser.games[1]
                             }
-                            if (user.hashedPassword) {
-                                user.hashedPassword = userDraft.hashedPassword
-                            }
-                            if (user.salt) {
-                                user.salt = userDraft.salt
-                            }
+                            user.hashedPassword = userDraft.hashedPassword
+                            user.salt = userDraft.salt
+                            
         
                             user.save().then(() => {
                                 if (user.check(credentials.password)) {
@@ -221,7 +218,7 @@ connection.sync().then(() => {
             ///CHAT
 
             ///TASK 
-            const incomingTask = (res: string, socketId: string) => {
+            const incomingTask = (res: string, socketId?: string) => {
                 const data = JSON.parse(res);
                 const parsed: string[] = data['text'].split('\n').map((item: string) => item ? item.trim() : '')
                 const cluesCount = parseInt(((parsed.shift()||'').split("(has")[1]||'0').trim())
@@ -231,26 +228,35 @@ connection.sync().then(() => {
                 const explanation = ((parsed.shift()||'').split(':')[1]||'').trim()
                 const clues = parsed.length ? parsed.filter((item: string, index: number) => index % 2) : ['No clues']
                 
-                socket.emit('incomingTask', {
-                    question,
-                    clues,
-                    cluesCount,
-                    delay: {
-                        min,
-                        sec
-                    },
-                    explanation
-                })
-                socket.to(socketId).emit('incomingTask', {
-                    question,
-                    clues,
-                    cluesCount,
-                    delay: {
-                        min,
-                        sec
-                    },
-                    explanation
-                })
+                if (!socketId) {
+                    socket.emit('incomingTask', {
+                        task: {
+                            question,
+                            clues,
+                            cluesCount,
+                            delay: {
+                                min,
+                                sec
+                            },
+                            explanation
+                        }
+                    })
+
+                } else {
+                    socket.to(socketId).emit('incomingTask', {
+                        task: {
+                            question,
+                            clues,
+                            cluesCount,
+                            delay: {
+                                min,
+                                sec
+                            },
+                            explanation
+                        }
+                    })
+                }
+                
             }
             socket.on('submitTask', ({user, answer}) => {
                 get({}, `/api/gameTracking/checkAnswer/${user.teamToken}@${answer}@${user.gameId}`).then(res => {
@@ -276,6 +282,7 @@ connection.sync().then(() => {
             })
             socket.on('updateTask', ({user}) => {
                 get({}, `/api/gameTracking/nextStep/${user.teamToken}@${user.gameId}`).then((res: string) => {
+                    incomingTask(res)
                     Object.keys(mobileSockets).forEach(userId => {
                         if (mobileSockets[userId].teamToken === user.teamToken) {
                             incomingTask(res, mobileSockets[userId].socket)

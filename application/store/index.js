@@ -29,13 +29,12 @@ socket.on('incomingMessage', message => {
     store.dispatch(gotNewMessage(message));
 });
 
-socket.on('incomingTask', task => {
+socket.on('incomingTask', ({task}) => {
     store.dispatch(gotTask(task));
 });
-socket.on('taskUpdated', task => {
+socket.on('taskUpdated', ({task}) => {
     store.dispatch(gotTask(task));
 });
-
 export const submitTask = (answer, user) => {
     socket.emit('submitTask', {
         answer, user

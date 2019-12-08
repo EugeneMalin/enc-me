@@ -42,14 +42,14 @@ class Question extends React.Component {
 
   render() {
     const clues = this.props.task && this.props.task.clues || []
-
+    const delay = this.props.task && this.props.task.delay || {min: 0, sec: 0}
     return (
       <Drawer.Section style={{ height: '100%', backgroundColor: this.props.theme['colors']['background'] }}>
-        <Text>
+        <Text style={{margin: 12}}>
           {(this.props.task && this.props.task.question) || 'Questions is over'}
         </Text>
 
-        {clues.map(exp => <Text>
+        {clues.map(exp => <Text style={{marginLeft: 12, marginRight: 12, marginTop: 3}}>
           {exp}
         </Text>)}
         
