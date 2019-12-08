@@ -42,6 +42,7 @@ connection.sync().then(() => {
                 if (!credentials.userName && !credentials.password) {
                     return;
                 }
+                
                 post({
                     accountName: credentials.userName,
                     password: credentials.password
@@ -56,13 +57,27 @@ connection.sync().then(() => {
                         }).then(([user]) => {
                         if (user) {
         
-                            user.token = engineUser.token
-                            user.teamToken = engineUser.teamToken
-                            user.hashedPassword = userDraft.hashedPassword
-                            user.salt = userDraft.salt
-                            user.firstName = engineUser.accountFirstName
-                            user.lastName = engineUser.accountLastName
-                            user.gameId = engineUser.games[0]
+                            if (engineUser.token) {
+                                user.token = engineUser.token
+                            }
+                            if (engineUser.teamToken) {
+                                user.teamToken = engineUser.teamToken
+                            }
+                            if (engineUser.accountFirstName) {
+                                user.firstName = engineUser.accountFirstName
+                            }
+                            if (engineUser.accountLastName) {
+                                user.lastName = engineUser.accountLastName
+                            }
+                            if (engineUser.games && engineUser.games[0]) {
+                                user.gameId = engineUser.games[0]
+                            }
+                            if (user.hashedPassword) {
+                                user.hashedPassword = userDraft.hashedPassword
+                            }
+                            if (user.salt) {
+                                user.salt = userDraft.salt
+                            }
         
                             user.save().then(() => {
                                 if (user.check(credentials.password)) {

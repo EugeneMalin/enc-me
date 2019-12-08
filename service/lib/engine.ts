@@ -3,6 +3,14 @@ import { ParsedUrlQuery } from 'querystring';
 import { request } from 'http';
 
 export function post(data: ParsedUrlQuery, path: string) {
+    if (process.env.NODE_ENV === 'demo') {
+        return new Promise<string>(resolve => {
+            resolve(JSON.stringify({
+                //@ts-ignore
+                isSuccess: ['novikov', 'kokoz', 'demidova'].indexOf(data.accountName) > -1, 
+            }))
+        })
+    }
     return new Promise<string>((resolve) => {
         const req = request({
             hostname: config.get('engine:host'),

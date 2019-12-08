@@ -8,7 +8,10 @@
   },
   "scripts": {
     "compile": "tsc",
-    "run": "tsc && node build/app.js"
+    "run": "tsc && node build/app.js",
+    "debug": "tsc && export DEBUG=express:* && node --inspect ./build/app.js",
+    "start": "tsc && export NODE_ENV=production && node ./build/app.js",
+    "demo": "tsc && export NODE_ENV=demo && node --inspect ./build/app.js"
   },
   "author": "",
   "license": "ISC",
